@@ -25,8 +25,10 @@ df['B2By'] = df['B2By'].astype('category')
 df['B3Postnr'] = df['B3Postnr'].astype('category')
 df['B3By'] = df['B3By'].astype('category')
 
-print(df.describe())
+print(df.isnull().sum())
 print(df.dtypes)
+print(df.describe())
+
 
 # Import of packages
 import plotly.plotly as py
