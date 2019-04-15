@@ -1,7 +1,36 @@
 import pandas as pd
 import numpy as np
+
+#For Anders: 
 file_path='C:/Users/ander/OneDrive/Skrivebord/KGML1.csv'
+
+#For Peter: 
+file_path='/Users/Peter/Downloads/KGML1.csv'
 
 df=pd.read_csv(file_path,sep=';')
 df2=pd.DataFrame(data=df)
 
+print(df2.head)
+
+
+###### PLOTS ########## 
+
+# Standard plotly imports
+import plotly.plotly as py
+import plotly.graph_objs as go
+from plotly.offline import iplot, init_notebook_mode
+# Using plotly + cufflinks in offline mode
+import cufflinks
+cufflinks.go_offline(connected=True)
+init_notebook_mode(connected=True)
+
+corrs = oj.corr()
+figure = ff.create_annotated_heatmap(
+    z=corrs.values,
+    x=list(corrs.columns),
+    y=list(corrs.index),
+    annotation_text=corrs.round(2).values,
+    showscale=True)
+    
+    
+figure.iplot()
