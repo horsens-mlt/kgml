@@ -167,9 +167,9 @@ model_us = XGBClassifier()
 model_us.fit(x_train_us, y_train_us, verbose=False)
 
 # Prediction 
-pred_smo=my_model.predict(x_test)
-pred_ada=my_model.predict(x_test)
-pred_us=my_model.predict(x_test)
+pred_smo=model_smo.predict(x_test)
+pred_ada=model_ada.predict(x_test)
+pred_us=model_us.predict(x_test)
 
 # Confusion Matrix for XgBoost model
 from sklearn.metrics import confusion_matrix
@@ -182,3 +182,124 @@ from sklearn.metrics import accuracy_score
 print(accuracy_score(y_test, pred_smo))
 print(accuracy_score(y_test, pred_ada))
 print(accuracy_score(y_test, pred_us))
+
+
+############### Thursday 18/4 ##################
+
+#Logistic Regression: 
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+    
+    #Fitting SMO model: 
+    log_smo = LogisticRegression()
+    log_smo.fit(x_train_smo, y_train_smo)
+    
+    #Fitting ADA model: 
+    log_ada = LogisticRegression()
+    log_ada.fit(x_train_ada, y_train_ada)
+
+    #Fitting US model: 
+    log_us = LogisticRegression()
+    log_us.fit(x_train_us, y_train_us) 
+        
+    #Prediction on test data:     
+    y_pred_smo = log_smo.predict(x_test)
+    print('Accuracy of logistic regression classifier - SMO on test set: {:.2f}'.format(log_smo.score(x_test, y_test)))
+
+    y_pred_ada = log_ada.predict(x_test)
+    print('Accuracy of logistic regression classifier - ADA on test set: {:.2f}'.format(log_ada.score(x_test, y_test)))
+
+    y_pred_us = log_us.predict(x_test)
+    print('Accuracy of logistic regression classifier - US on test set: {:.2f}'.format(log_us.score(x_test, y_test)))
+    
+    #Confusion matrices: 
+    from sklearn.metrics import confusion_matrix
+    confusion_matrix_smo = confusion_matrix(y_test, y_pred_smo)
+    print(confusion_matrix_smo)
+
+    confusion_matrix_ada = confusion_matrix(y_test, y_pred_ada)
+    print(confusion_matrix_ada)
+
+    confusion_matrix_us = confusion_matrix(y_test, y_pred_us)
+    print(confusion_matrix_us)
+
+# Support Vector Machines (SVM's): 
+   
+    from sklearn import svm
+    
+    #Training models: 
+    svc_smo = svm.SVC(gamma='scale')
+    svc_smo.fit(x_train_smo, y_train_smo)
+
+    svc_ada = svm.SVC(gamma='scale')
+    svc_ada.fit(x_train_ada, y_train_ada)
+
+    svc_us = svm.SVC(gamma='scale')
+    svc_us.fit(x_train_us, y_train_us)
+    
+    #Predictions: 
+    svc_pred_smo = svc_smo.predict(x_test)
+    print('Accuracy of SVM classifier - SMO on test set: {:.2f}'.format(svc_smo.score(x_test, y_test)))
+
+    svc_pred_ada = svc_ada.predict(x_test)
+    print('Accuracy of SVM classifier - ADA on test set: {:.2f}'.format(svc_ada.score(x_test, y_test)))
+
+    svc_pred_us = svc_us.predict(x_test)
+    print('Accuracy of SVM classifier - US on test set: {:.2f}'.format(svc_us.score(x_test, y_test)))
+    
+    #Confusion matrices: 
+    from sklearn.metrics import confusion_matrix
+    confusion_matrix_smo_svc = confusion_matrix(y_test, svc_pred_smo)
+    print(confusion_matrix_smo)
+
+    confusion_matrix_ada_svc = confusion_matrix(y_test, svc_pred_ada)
+    print(confusion_matrix_ada)
+
+    confusion_matrix_us_svc = confusion_matrix(y_test, svc_pred_us)
+    print(confusion_matrix_us)
+    
+#Other classifiers: 
+
+# Adaboost: 
+
+    from sklearn.model_selection import cross_val_score
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import AdaBoostClassifier
+    
+    #Training, prediction and calculating accuracy: 
+    clf = AdaBoostClassifier(n_estimators=100)   
+    scores_smo = cross_val_score(clf, x_train_smo, y_train_smo, cv=5)
+    print(scores_smo.mean())
+    scores_ada = cross_val_score(clf, x_train_ada, y_train_ada, cv=5)
+    print(scores_ada.mean())
+    scores_us = cross_val_score(clf, x_train_us, y_train_us, cv=5)
+    print(scores_us.mean())
+    
+# Gradient Boosting Classifier: 
+    from sklearn.ensemble import GradientBoostingClassifier
+    
+    #Training, prediction and calculating accuracy: 
+    clf_smo = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0).fit(x_train_smo, y_train_smo)
+    clf_pred_smo = clf_smo.predict(x_test)
+    print(clf_smo.score(x_test, y_test))  
+
+    clf_ada = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0).fit(x_train_ada, y_train_ada)
+    clf_pred_ada = clf_ada.predict(x_test)
+    print(clf_ada.score(x_test, y_test))
+
+    clf_us = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0).fit(x_train_us, y_train_us)
+    clf_pred_us = clf_us.predict(x_test)
+    print(clf_us.score(x_test, y_test))
+    
+    #Confusion matrices: 
+    from sklearn.metrics import confusion_matrix
+
+    confusion_matrix_smo_clf = confusion_matrix(y_test, clf_pred_smo)
+    print(confusion_matrix_smo_clf)
+
+    confusion_matrix_ada_clf = confusion_matrix(y_test, clf_pred_ada)
+    print(confusion_matrix_ada_clf)
+
+    confusion_matrix_us_clf = confusion_matrix(y_test, clf_pred_us)
+    print(confusion_matrix_us_clf)
+
