@@ -1,4 +1,12 @@
-#General settings and data import 
+############ DATA UNDERSTANDING ##############
+
+###     Includes following: 
+#       1. Data import 
+#       2. Overview - summary statistics, data types & missing values 
+#       3. Correlations 
+#       4. Target characteristics
+
+### 1. Data import and general settings
 import pandas as pd 
 import numpy as np
 
@@ -9,12 +17,13 @@ pd.set_option('display.max_columns',500)
 pd.set_option('display.max_rows',500)
 
 
-#Overview - summary statistics, data types & missing values 
+### 2. Overview - summary statistics, data types & missing values 
 print(df.describe())
 print(df.dtypes)
 print(df.isnull().sum())
 df
 
+### 3. Correlations 
 
 # Import of packages for plotting: 
 import plotly.plotly as py
@@ -22,13 +31,12 @@ import plotly.graph_objs as go
 import plotly.figure_factory as ff
 from plotly.offline import iplot, init_notebook_mode
 
-
 # Using plotly + cufflinks in offline mode
 import cufflinks
 cufflinks.go_offline(connected=True)
 init_notebook_mode(connected=True)
 
-# Intercorrelation between variables 
+# Correlation between variables 
 df.corr() # Inspect values 
 
 #Create Correlogram - Heatmap: 
@@ -42,8 +50,7 @@ figure = ff.create_annotated_heatmap(
         
 figure.iplot()
 
-
-# Visualizing the target:  
+### 4. Target distribution:  
 
 import matplotlib.pyplot as plt
 pd.value_counts(df['Target']).plot.bar()
@@ -52,3 +59,6 @@ plt.xlabel('Class')
 plt.ylabel('Frequency')
     
 df['Target'].value_counts()
+
+#Means across dataset for Target classes: 
+df.groupby('Target').mean()
