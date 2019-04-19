@@ -1,10 +1,18 @@
-########################## XGBoost ##########################
+############ Modelling ############
+
+###   Includes following: 
+#     1. XGBoost 
+#     2. Logistic Regression
+#     3. Support Vector Machines 
+#     4. 
+#     5. 
+
+### 1. XGBoost 
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 
-
-########## Model definition ##########
+# Fitting Models:  
 model_smo = XGBClassifier()
 model_smo.fit(x_train_smo, y_train_smo, verbose=False)
 
@@ -14,7 +22,7 @@ model_ada.fit(x_train_ada, y_train_ada, verbose=False)
 model_us = XGBClassifier()
 model_us.fit(x_train_us, y_train_us, verbose=False)
 
-########## Model prediction ##########
+# Creating Predictions: 
 pred_smo=model_smo.predict(x_test)
 print('Accuracy of XGBoost classifier - SMO on test set: {:.3f}'.format(accuracy_score(y_test, pred_smo)))
 
@@ -24,7 +32,7 @@ print('Accuracy of XGBoost classifier - ADA on test set: {:.3f}'.format(accuracy
 pred_us=model_us.predict(x_test_us)
 print('Accuracy of XGBoost classifier - US on test set: {:.3f}'.format(accuracy_score(y_test_us, pred_us)))
 
-##### Confusion matrix #####
+# Confusion matrices
 print('Confusion matrix - XGBoost with Smote:')
 print(confusion_matrix(y_test,pred_smo))
 
@@ -34,13 +42,12 @@ print(confusion_matrix(y_test,pred_ada))
 print('\n','Confusion matrix - XGBoost with UnderSampling:')
 print(confusion_matrix(y_test_us,pred_us))
 
-########################## Logistic Regression ##########################
+### 2. Logistic Regression 
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 
-
-########## Model definition ##########
+# Fitting Models:  
 log_smo = LogisticRegression()
 log_smo.fit(x_train_smo, y_train_smo)
    
@@ -50,8 +57,7 @@ log_ada.fit(x_train_ada, y_train_ada)
 log_us = LogisticRegression()
 log_us.fit(x_train_us, y_train_us) 
 
-
-########## Model prediction ##########
+# Creating Predictions: 
 y_pred_smo = log_smo.predict(x_test)
 print('Accuracy of logistic regression classifier - SMO on test set: {:.3f}'.format(accuracy_score(y_test, y_pred_smo)))
 
@@ -61,8 +67,7 @@ print('Accuracy of logistic regression classifier - ADA on test set: {:.3f}'.for
 y_pred_us = log_us.predict(x_test_us)
 print('Accuracy of logistic regression classifier - US on test set: {:.3f}'.format(accuracy_score(y_test_us, y_pred_us)))
 
-
-##### Confusion matrix #####
+# Confusion matrices
 print('Confusion matrix - Logistic Regression with Smote:')
 print(confusion_matrix(y_test, y_pred_smo))
 
@@ -73,13 +78,12 @@ print('\n','Confusion matrix - Logistic Regression with UnderSampling:')
 print(confusion_matrix(y_test_us, y_pred_us))
 
 
-########################## Support Vector Machines ##########################
+### 3. Support Vector Machines 
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 
-
-########## Model definition ##########
+# Fitting Models
 svc_smo = svm.SVC(gamma='scale')
 svc_smo.fit(x_train_smo, y_train_smo)
 
@@ -90,7 +94,7 @@ svc_us = svm.SVC(gamma='scale')
 svc_us.fit(x_train_us, y_train_us)
 
 
-########## Model prediction ##########
+# Creating predictions 
 svc_pred_smo = svc_smo.predict(x_test)
 print('Accuracy of SVM classifier - SMO on test set: {:.3f}'.format(accuracy_score(y_test, svc_pred_smo)))
 
@@ -101,7 +105,7 @@ svc_pred_us = svc_us.predict(x_test_us)
 print('Accuracy of SVM classifier - US on test set: {:.3f}'.format(accuracy_score(y_test_us, svc_pred_us)))
 
 
-##### Confusion matrix #####
+# Confusion matrices
 print('Confusion matrix - Support Vector Machine with Smote:')
 print(confusion_matrix(y_test, svc_pred_smo))
 
