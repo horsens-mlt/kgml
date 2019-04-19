@@ -82,6 +82,14 @@ y_train_ada =y_train_ada.rename(columns={0: 'Target'})
 y_train_us=pd.DataFrame(y_train_us)
 y_train_us =y_train_us.rename(columns={0: 'Target'})
 
+########################## Feature variable conversion ##########################
+
+x_train_smo=pd.DataFrame(x_train_smo,columns=[x_test])
+x_train_ada=pd.DataFrame(x_train_ada,columns=[x_test])
+x_train_us=pd.DataFrame(x_train_us,columns=[x_test])
+
+x_test_us=pd.DataFrame(x_test_us,columns=[x_test])
+
 ########################## Distribution plots ##########################
 # SMOTE distribution plot  
 pd.value_counts(y_train_smo['Target']).plot.bar()
@@ -103,3 +111,5 @@ plt.title('Benefit Fraud histogram')
 plt.xlabel('Class')
 plt.ylabel('Frequency')
 y_train_us['Target'].value_counts()
+
+
