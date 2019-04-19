@@ -53,6 +53,56 @@ print(classification_report(y_test,pred_ada))
 print('\n','Performance Measures - XGBoost with Adasyn:')
 print(classification_report(y_test_us,pred_us))
 
+#AUC/ROC curves: 
+
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+
+print('ROC/AUC - XGBoost with SMOTE:')
+logit_roc_auc = roc_auc_score(y_test, model_smo.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, model_smo.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='XGBoost with SMOTE (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('ROC/AUC - XGBoost with ADASYN:')
+logit_roc_auc = roc_auc_score(y_test, model_ada.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, model_ada.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='XGBoost with ADASYN (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('ROC/AUC - XGBoost with US:')
+logit_roc_auc = roc_auc_score(y_test_us, model_us.predict(x_test_us))
+fpr, tpr, thresholds = roc_curve(y_test_us, model_us.predict_proba(x_test_us)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='XGBoost with US (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
 ### 2. Logistic Regression 
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
@@ -99,19 +149,69 @@ print(classification_report(y_test,y_pred_ada))
 print('\n','Performance Measures - XGBoost with Adasyn:')
 print(classification_report(y_test_us,y_pred_us))
 
+#AUC/ROC curves: 
+
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+
+print('Logistic Regression with SMOTE:')
+logit_roc_auc = roc_auc_score(y_test, log_smo.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, log_smo.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='Logistic Regression with SMOTE (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('Logistic Regression with ADASYN:')
+logit_roc_auc = roc_auc_score(y_test, log_ada.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, log_ada.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='Logistic Regression with ADASYN (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('Logistic Regression with US:')
+logit_roc_auc = roc_auc_score(y_test_us, model_us.predict(x_test_us))
+fpr, tpr, thresholds = roc_curve(y_test_us, log_us.predict_proba(x_test_us)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='Logistic Regression with US (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
 ### 3. Support Vector Machines 
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 
 # Fitting Models
-svc_smo = svm.SVC(gamma='scale')
+svc_smo = svm.SVC(gamma='scale', probability = True)
 svc_smo.fit(x_train_smo, y_train_smo)
 
-svc_ada = svm.SVC(gamma='scale')
+svc_ada = svm.SVC(gamma='scale', probability = True)
 svc_ada.fit(x_train_ada, y_train_ada)
 
-svc_us = svm.SVC(gamma='scale')
+svc_us = svm.SVC(gamma='scale', probability = True)
 svc_us.fit(x_train_us, y_train_us)
 
 # Creating predictions 
@@ -145,3 +245,52 @@ print(classification_report(y_test,svc_pred_ada))
 print('\n','Performance Measures - XGBoost with Adasyn:')
 print(classification_report(y_test_us,svc_pred_us))
 
+#AUC/ROC curves: 
+
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+
+print('SVMs with SMOTE :')
+logit_roc_auc = roc_auc_score(y_test, svc_smo.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, svc_smo.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='SVMs with SMOTE (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('SVMs with ADASYN:')
+logit_roc_auc = roc_auc_score(y_test, svc_ada.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, svc_ada.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='SVMs with ADASYN (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('SVMs with US:')
+logit_roc_auc = roc_auc_score(y_test_us, svc_us.predict(x_test_us))
+fpr, tpr, thresholds = roc_curve(y_test_us, svc_us.predict_proba(x_test_us)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='SVMs with US (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
