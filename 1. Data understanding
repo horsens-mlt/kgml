@@ -1,1 +1,54 @@
+#General settings and data import 
+import pandas as pd 
+import numpy as np
 
+file_path='C:/Users/ander/OneDrive/Skrivebord/KGML1.csv'
+df=pd.read_csv(file_path,sep=';',decimal=",")
+
+pd.set_option('display.max_columns',500)
+pd.set_option('display.max_rows',500)
+
+
+#Overview - summary statistics, data types & missing values 
+print(df.describe())
+print(df.dtypes)
+print(df.isnull().sum())
+df
+
+
+# Import of packages for plotting: 
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly.figure_factory as ff
+from plotly.offline import iplot, init_notebook_mode
+
+
+# Using plotly + cufflinks in offline mode
+import cufflinks
+cufflinks.go_offline(connected=True)
+init_notebook_mode(connected=True)
+
+# Intercorrelation between variables 
+df.corr() # Inspect values 
+
+#Create Correlogram - Heatmap: 
+corrs = df.corr() # We plot them visually
+figure = ff.create_annotated_heatmap(
+    z=corrs.values,
+    x=list(corrs.columns),
+    y=list(corrs.index),
+    annotation_text=corrs.round(2).values,
+    showscale=True)
+        
+figure.iplot()
+
+
+# Visualizing the target:  
+
+import matplotlib.pyplot as plt
+pd.value_counts(df['Target']).plot.bar()
+plt.title('Benefit Fraud histogram')
+plt.xlabel('Class')
+plt.ylabel('Frequency')
+    
+df['Target'].value_counts()
