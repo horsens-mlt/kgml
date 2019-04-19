@@ -1,3 +1,17 @@
+######## Data Preparation #########
+
+###      Includes following: 
+#        1. Data Type conversions
+#        2. Handling Missing Values
+#        3. Variable Selection 
+#        4. Training/test split 
+#        5. Balancing Target Distribution 
+#           5.1 SMOTE 
+#           5.2 ADASYN
+#           5.3 Under Sampling 
+
+### 1. Data Type conversions: 
+
 # Comvertimg variable types & setting number of decimals: 
 
 # Transform int64 variables to categorical vairables 
@@ -28,19 +42,20 @@ df['B3By']=df['B3By'].cat.codes
 # Set all cell values in DF to include only two decimals: 
 df=df.round(2)
 
+### 2. Handling Missing Values
+
 # Set empty cells ("") to NAN
 df=df.replace(r'^\s*$', np.nan, regex=True)
+
+### 3. Variable Selection 
 
 # Variables being dropped due to correlation 
 df=df.drop(['id','AEPostnr','BPostnr','B2Postnr','B3Postnr','MPostnr','IndexKvartal','B3By','B3Alder',
             'B2Alder','UDKTypeEkstraBTilskudEnlig','KTypePensKom'],axis=1)
-            
-            
-            
-########################### Creating training/test split: ########################################
+         
+### 4. Creating training/test split: 
 
 from sklearn.model_selection import train_test_split
-
 
 x=df.iloc[:,1:]
 y=df.iloc[:,0]
@@ -53,26 +68,26 @@ print('Number of observations and columns in x test' , x_test.shape)
 print('Number of observations and columns in y test' , y_test.shape)
 
 
-########################## Balance methods ##########################
+### 5. Balancing dataset 
 # From above it is clear that our distribution is highly skewed - SMOTE:  
 from imblearn.over_sampling import SMOTE
 from imblearn.over_sampling import ADASYN
 from imblearn.under_sampling import RandomUnderSampler
 
-
-########################## Resampling ##########################
+## 5.1 SMOTE 
 sm=SMOTE(random_state=2)
 x_train_smo,y_train_smo=sm.fit_sample(x_train,y_train)
 
+## 5.2 ADASYN
 sma=ADASYN(random_state=3)
 x_train_ada,y_train_ada=sma.fit_sample(x_train,y_train)
 
+## 5.3 Under Sampling
 rus=RandomUnderSampler(random_state=4)
 x_train_us,y_train_us=rus.fit_sample(x_train,y_train)
 x_test_us,y_test_us=rus.fit_sample(x_test,y_test)
 
-
-########################## Target variable conversion ##########################
+## Converting variables back to Data frames: 
 y_train_smo=pd.DataFrame(y_train_smo)
 y_train_smo =y_train_smo.rename(columns={0: 'Target'})
 
@@ -82,15 +97,12 @@ y_train_ada =y_train_ada.rename(columns={0: 'Target'})
 y_train_us=pd.DataFrame(y_train_us)
 y_train_us =y_train_us.rename(columns={0: 'Target'})
 
-########################## Feature variable conversion ##########################
-
 x_train_smo=pd.DataFrame(x_train_smo,columns=[x_test])
 x_train_ada=pd.DataFrame(x_train_ada,columns=[x_test])
 x_train_us=pd.DataFrame(x_train_us,columns=[x_test])
-
 x_test_us=pd.DataFrame(x_test_us,columns=[x_test])
 
-########################## Distribution plots ##########################
+## Plotting Target Distribution af balancing: 
 # SMOTE distribution plot  
 pd.value_counts(y_train_smo['Target']).plot.bar()
 plt.title('Benefit Fraud histogram')
@@ -111,5 +123,3 @@ plt.title('Benefit Fraud histogram')
 plt.xlabel('Class')
 plt.ylabel('Frequency')
 y_train_us['Target'].value_counts()
-
-
