@@ -5,7 +5,7 @@
 #     2. Logistic Regression
 #     3. Support Vector Machines 
 #     4. ADABoost
-#     5. 
+#     5. Gradient Boosting
 
 ### 1. XGBoost 
 from xgboost import XGBClassifier
@@ -390,3 +390,89 @@ plt.legend(loc="lower right")
 plt.savefig('Log_ROC')
 plt.show()
 
+### 5. Gradient Boosting 
+
+# Training & creating predictions: 
+from sklearn.ensemble import GradientBoostingClassifier
+gbc_smo = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0).fit(x_train_smo, y_train_smo)
+gbc_pred_smo = gbc_smo.predict(x_test)
+print('Accuracy of GB classifier - SMO on test set: {:.2f}'.format(gbc_smo.score(x_test, y_test)))
+
+gbc_ada = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0).fit(x_train_ada, y_train_ada)
+gbc_pred_ada = gbc_ada.predict(x_test)
+print('Accuracy of GB classifier - ADA on test set: {:.2f}'.format(gbc_ada.score(x_test, y_test)))
+
+gbc_us = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0).fit(x_train_us, y_train_us)
+gbc_pred_us = gbc_us.predict(x_test_us)
+print('Accuracy of GB classifier - US on test set: {:.2f}'.format(gbc_us.score(x_test_us, y_test_us)))
+
+# Confusion matrices
+print('Confusion matrix - GB with Smote:')
+print(confusion_matrix(y_test, gbc_pred_smo))
+
+print('\n','Confusion matrix - GB with Adasyn:')
+print(confusion_matrix(y_test, gbc_pred_ada))
+
+print('\n','Confusion matrix - GB with UnderSampling:')
+print(confusion_matrix(y_test_us, gbc_pred_us))
+
+# Accuracy measures: 
+from sklearn.metrics import classification_report
+print('Performance Measures - GB with Smote:')
+print(classification_report(y_test, gbc_pred_smo)) 
+
+print('\n','Performance Measures - GB with Adasyn:')
+print(classification_report(y_test,gbc_pred_ada))
+
+print('\n','Performance Measures - GB with Adasyn:')
+print(classification_report(y_test_us,gbc_pred_us))
+
+#AUC/ROC curves: 
+
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+
+print('GB with SMOTE :')
+logit_roc_auc = roc_auc_score(y_test, gbc_smo.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, gbc_smo.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='GB with SMOTE (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('GB with ADASYN:')
+logit_roc_auc = roc_auc_score(y_test, gbc_ada.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, gbc_ada.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='GB with ADASYN (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('GB with US:')
+logit_roc_auc = roc_auc_score(y_test_us, gbc_us.predict(x_test_us))
+fpr, tpr, thresholds = roc_curve(y_test_us, gbc_us.predict_proba(x_test_us)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='GB with US (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
