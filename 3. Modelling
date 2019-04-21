@@ -4,7 +4,7 @@
 #     1. XGBoost 
 #     2. Logistic Regression
 #     3. Support Vector Machines 
-#     4. 
+#     4. ADABoost
 #     5. 
 
 ### 1. XGBoost 
@@ -294,3 +294,99 @@ plt.title('Receiver operating characteristic')
 plt.legend(loc="lower right")
 plt.savefig('Log_ROC')
 plt.show()
+
+### 4. ADABoost
+
+# Adaboost: 
+
+# Fitting Models & creating predictions: 
+from sklearn.model_selection import cross_val_score
+from sklearn.datasets import load_iris
+from sklearn.ensemble import AdaBoostClassifier
+
+clf_smo = AdaBoostClassifier(n_estimators=100)
+ada_smo = clf_smo.fit(x_train_smo,y_train_smo)
+ada_pred_smo = ada_smo.predict(x_test)
+print('Accuracy of ADABoost classifier - SMO on test set: {:.2f}'.format(ada_smo.score(x_test, y_test)))
+
+clf_ada = AdaBoostClassifier(n_estimators=100)
+ada_ada = clf_ada.fit(x_train_ada,y_train_ada)
+ada_pred_ada = ada_ada.predict(x_test)
+print('Accuracy of ADABoost classifier - ADA on test set: {:.2f}'.format(ada_ada.score(x_test, y_test)))
+
+clf_us = AdaBoostClassifier(n_estimators=100)
+ada_us = clf_us.fit(x_train_us,y_train_us)
+ada_pred_us = ada_us.predict(x_test_us)
+print('Accuracy of ADABoost classifier - US on test set: {:.2f}'.format(ada_ada.score(x_test_us, y_test_us)))
+
+# Confusion matrices
+print('Confusion matrix - ADABoost with Smote:')
+print(confusion_matrix(y_test, ada_pred_smo))
+
+print('\n','Confusion matrix - ADABoost with Adasyn:')
+print(confusion_matrix(y_test, ada_pred_ada))
+
+print('\n','Confusion matrix - ADABoost with UnderSampling:')
+print(confusion_matrix(y_test_us, ada_pred_us))
+
+# Accuracy measures: 
+from sklearn.metrics import classification_report
+print('Performance Measures - ADABoost with Smote:')
+print(classification_report(y_test, ada_pred_smo)) 
+
+print('\n','Performance Measures - ADABoost with Adasyn:')
+print(classification_report(y_test,ada_pred_ada))
+
+print('\n','Performance Measures - ADABoost with Adasyn:')
+print(classification_report(y_test_us,ada_pred_us))
+
+#AUC/ROC curves: 
+
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+
+print('ADABoost with SMOTE :')
+logit_roc_auc = roc_auc_score(y_test, ada_smo.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, ada_smo.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='ADABoost with SMOTE (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('ADABoost with ADASYN:')
+logit_roc_auc = roc_auc_score(y_test, ada_ada.predict(x_test))
+fpr, tpr, thresholds = roc_curve(y_test, ada_ada.predict_proba(x_test)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='ADABoost with ADASYN (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
+print('ADABoost with US:')
+logit_roc_auc = roc_auc_score(y_test_us, ada_us.predict(x_test_us))
+fpr, tpr, thresholds = roc_curve(y_test_us, ada_us.predict_proba(x_test_us)[:,1])
+plt.figure()
+plt.plot(fpr, tpr, label='ADABoost with US (area = %0.2f)' % logit_roc_auc)
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc="lower right")
+plt.savefig('Log_ROC')
+plt.show()
+
