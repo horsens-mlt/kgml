@@ -301,7 +301,6 @@ plt.show()
 
 # Fitting Models & creating predictions: 
 from sklearn.model_selection import cross_val_score
-from sklearn.datasets import load_iris
 from sklearn.ensemble import AdaBoostClassifier
 
 clf_smo = AdaBoostClassifier(n_estimators=100)
